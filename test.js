@@ -40,6 +40,32 @@ function solution(queue1, queue2) {
     let eq = (queue1.reduce((acc, cur) => acc + cur, 0) + queue2.reduce((acc, cur) => acc + cur, 0))
     let total = 0
 
+    //function
+    const check = (arr1,arr2) => {
+        queue1 = [...queue1, ...queue2]
+        queue2 = [...queue2, ...queue1]
+        console.log(queue1+"\n"+queue2)
+        console.log("")
+        console.log(arr1+"\n"+arr2)
+        let r = 0
+        for(let i=0; i<queue1.length; i++){
+            if(JSON.stringify(queue1.slice(i,i+arr1.length)) === JSON.stringify(arr1)){
+                r+=i
+                break;
+            }
+        }
+        for(let i=0; i<queue2.length; i++){
+            if(JSON.stringify(queue2.slice(i,i+arr2.length)) === JSON.stringify(arr2)){
+                r+=i
+                break
+            }
+        }
+        return r
+    }
+    
+
+
+
     if(eq % 2 === 1){
         return -1
     }
@@ -47,15 +73,10 @@ function solution(queue1, queue2) {
     let len2 = queue2.length
     for(let i = 0; i < arr.length; i++){
         let totalArr = []
-        for(let j = i; j < arr.length; j++){
+        for(let j = i; j < i+arr.length/2; j++){
             if(total === eq/2){
                 answer = i - len1 + 1
-                console.log(totalArr)
-                console.log(arr.slice(j,j+((arr.length/2)-totalArr.length)))
-                total = 0
-                totalArr = []
-                return
-                break
+                return check(totalArr,arr.slice(j,j+((arr.length/2)-totalArr.length)))
             } else if(total > eq/2){
                 total = 0
                 totalArr = []
@@ -65,15 +86,14 @@ function solution(queue1, queue2) {
             totalArr.push(arr[j])
         }
     }
-
     return answer;
 }
-// let queue1 = [3, 2, 7, 2]
-// let queue2 = [4, 6, 5, 1]
+let queue1 = [3, 2, 7, 2]
+let queue2 = [4, 6, 5, 1]
 // let queue1 = [1, 2, 1, 2]
 // let queue2 = [1, 10, 1, 2]	
-let queue1 = [4, 4, 5, 2]
-let queue2 = [5, 1, 1, 2]	
+// let queue1 = [2, 1, 4, 2]
+// let queue2 = [5, 3, 4, 3]	
 // let queue1 = [1, 1]
 // let queue2 = [1, 5]	
 console.log(
