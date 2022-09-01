@@ -25,7 +25,7 @@ function solution(queue1, queue2) {
     const sum = (arr) => {
         return arr.reduce((acc, cur) => acc + cur, 0)
     }
-    if((sum(queue1) + sum(queue2)) %2 !== 0){
+    if((sum(queue1) + sum(queue2)) % 2 === 1){
         return -1
     }
 
