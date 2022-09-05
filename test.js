@@ -1,72 +1,27 @@
-/*
-1. que1이 que2보다 크면 que1빼서 que2에 넣는 작업 수행
-2. 반복
-
-이거 시간초과남
-shift랑 push가 시간초과를 일으키는 것 같음
-
-i.      j
-3 2 7 2 4 6 5 1 3 2 7 2 4 6 5 1
-          ij
-1 2 1 2	1 10 1 2 1 2 1 2 1 10 1 2
-
-i가 1이고
-j가 4일때 정답임
-
-i는 shift 1회를 뜻함
-j는 
-
-i=5
-j=5
-len=4
-
-i = 5
-i+(len-j) = 
-
-i+(i+len-j) = 
-
-4-4 = 0
-4-4 = 0
-
-4-1 = 3
-4-7 = -3
-
-1, 2, 1, 2,	1, 10, 1, 2, 1, 2, 1, 2, 1, 10, 1, 2
-
-
-
-*/
-function solution(queue1, queue2) {
-    const arr = [...queue1, ...queue2, ...queue1, ...queue2]
-    let eq = arr.reduce((acc, cur) => acc + cur, 0)
-    let total = queue1.reduce((acc, cur) => acc + cur, 0)
-   
-    if(eq % 4 === 1){
-        return -1
-    }
-
-    for(let i=queue1.length, j=0; i < arr.length;){
-        console.log(total,eq/4)
-        if( total<eq/4 ){
-            total += arr[i]
-            i++
-        }else if(total > eq/4){
-            total -= arr[j]
-            j++
-        } else if(total === eq/4){
-            return i+j-queue1.length
+function solution(skill, skill_trees) {
+    let cnt = 0
+    for(let i of skill_trees){
+        i = i.replace(new RegExp(`[^${skill}]`, 'g'), '')
+        if(i === skill.slice(0,i.length)){
+            cnt++
         }
     }
-    return -1;
+    return cnt;
 }
-let queue1 = [3, 2, 7, 2]
-let queue2 = [4, 6, 5, 1]
-// let queue1 = [1, 2, 1, 2]
-// let queue2 = [1, 10, 1, 2]	
-// let queue1 = [2, 1, 4, 2]
-// let queue2 = [5, 3, 4, 3]	
-// let queue1 = [1, 1]
-// let queue2 = [1, 5]	
+/*
+    skill_tree에서 언제배워도 상관없는 스킬들 다 빼면
+    skill의 0~[1~skill.length]의 부분집합만 나옴
+    예) skill = [A,B,C,D,E]일때
+    skill_tree를 필터링하면
+    A
+    AB
+    ABC
+    ABCD
+    ABCDE
+    중 하나임
+*/
+let skill = "CBD"
+let skill_trees = ["BACDE", "CBADF", "AECB", "BDA"]
 console.log(
-    solution(queue1,queue2)
+    solution(skill,skill_trees)
 )
