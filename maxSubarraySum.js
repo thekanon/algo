@@ -10,7 +10,7 @@ maxSubarraySum([],4) // null
 
 */
 function maxSubarraySum(arr,n) {
-    if(arr.length === 0){
+    if(arr.length === 0 || arr.length < n){
         return null
     }
     let j=0, cnt=0, tmp =0;
