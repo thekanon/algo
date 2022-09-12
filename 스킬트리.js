@@ -1,7 +1,7 @@
 function solution(skill, skill_trees) {
     let cnt = 0
     for(let i of skill_trees){
-        i = i.replace(new RegExp(`[^${skill}]`, 'g'), '')
+        i = i.replace
         if(i === skill.slice(0,i.length)){
             cnt++
         }
