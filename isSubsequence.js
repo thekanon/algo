@@ -19,21 +19,23 @@ Space Complexity - O(1)
 1. st1을 돌면서 str2를 찾음
 
 */
-function maxSubarraySum(arr, n) {
-    if(n>arr.length) return null
-    let result = -Infinity
-    let tmp = 0
-    for(let i=0;i<n;i++){
-        tmp += arr[i]
+function isSubsequence(str1, str2) {
+    let index = 0
+    let cnt = 0
+    for (let i = 0; i < str1.length; i++) {
+        while (index < str2.length) {
+            if (str1[i] === str2[index]) {
+                cnt++
+                index++;
+                break;
+            }
+            index++;
+        }
     }
-    for(let i=n;i<arr.length;i++){
-        tmp=tmp-arr[i-n]+arr[i]
-        result = Math.max(result,tmp)
-    }
-    return result
+    if(cnt === str1.length) return true;
+    return false;
 }
-console.log(maxSubarraySum([100,200,300,400], 2)) // 700
-console.log(maxSubarraySum([1,4,2,10,23,3,1,0,20], 4) ) // 39 
-console.log(maxSubarraySum([-3,4,0,-2,6,-1], 2)) // 5
-console.log(maxSubarraySum([3,-2,7,-4,1,-1,4,-2,1],2)) // 5
-console.log(maxSubarraySum([2,3], 3)) // null
+console.log(isSubsequence('hello', 'hello world'))
+console.log(isSubsequence('sing', 'sting'))
+console.log(isSubsequence('abc', 'abracadabra'))
+console.log(isSubsequence('abc', 'acb'))
