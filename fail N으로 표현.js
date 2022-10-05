@@ -4,12 +4,28 @@
     12 = 55 / 5 + 5 / 5
     12 = (55 + 5) / 5
 
+
+5
+    5*5
+        5*5*5
+        5*5+5
+        5*5-5
+
+
+    5+5
+    5-5
+    5/5
+
     +5부터 시작해서 
     55 할지
     5+5 할지
     5-5 할지
     5*5 할지
     5/5 할지
+
+    5+5/(5+5)+5
+    (5/5)+(5/5)
+
 
     분기처리함
 
@@ -47,10 +63,14 @@ function solution(N, number) {
     drawExpression(0, 0,"")
     return answer;
 }
-console.log(solution(5, 12))
+// console.log(solution(5, 12))
 // console.log(solution(2, 11))
 // console.log(solution(4, 31))
-// console.log(solution(4, 17))
+console.log(solution(4, 17))
 // console.log(solution(5, 26))
 // console.log(solution(8, 5800))
 // (444-44)*4
+// 17
+// 4
+4+44/4-4
+4*4+(4/4)
