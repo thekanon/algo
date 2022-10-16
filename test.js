@@ -1,20 +1,25 @@
 /*
-    1. n보다 큰 수부터 1000000까지 순회
-    2. 이진수로 변환
+    1. grid의 각 문자열별로 상하좌우를 탐색한다.
+    2. 탐색 함수 : S,L,R의 조간에 따른다, 격자를 넘어갈때를 고려한다.
+    3. 사이클이 만들어지면 사이클의 탐색 경로를 저장한다.
+    4. 중복된 사이클은 검증하여 제거한다.
+    5. 저장된 사이클의 길이를 구하고 오름차순으로 정렬한다.
 */
-function solution(n) {
-    var answer = 0;
-    const toBinary = (n) => {
-        return n.toString(2)
-    }
-    const get1Count = (n) => {
-        return n.split('').filter((v) => v === '1').length
-    }
+function solution(grid) {
+    var answer = [];
 
-    for(let i=n+1; i<=1000000; i++) {
-        if(get1Count(toBinary(n)) === get1Count(toBinary(i))) {
-            return i
-        }
+    /* 
+        x,y : 좌표
+        dir : 빛 방향 코드
+        path : 시작 방향
+    */
+    const search = (x,y, dirCode, path) => {
+                
     }
+    search(0,0,grid[0][0],"D")
+    console.log(answer)
+    return answer;
 }
-solution(78)
+solution(["SL", "LR"])
+solution(["S"])
+solution(["R", "R"])
