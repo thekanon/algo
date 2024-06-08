@@ -1,61 +1,84 @@
-/*
-  N개의 마을로 이루어진 나라가 있습니다. 
-  이 나라의 각 마을에는 1부터 N까지의 번호가 각각 하나씩 부여되어 있습니다. 
-  각 마을은 
-  [양방향]
-  으로 통행할 수 있는 도로로 연결되어 있는데, 서로 다른 마을 간에 이동할 때는 이 도로를 지나야 합니다. 
-  도로를 지날 때 걸리는 시간은 
-  도로별로 다릅니다. 
-  현재 1번 마을에 있는 음식점에서 [각 마을로 음식 배달]을 하려고 합니다. 
-  각 마을로부터 음식 주문을 받으려고 하는데,  
-  N개의 마을 중에서 K 시간 이하로 배달이 가능한 마을에서만 주문
-  을 받으려고 합니다. 
+/**
+ * 당신은 쇼핑몰에서 상품을 검색할 수 있습니다.
+ * 검색어를 입력하면 검색어를 부분 문자열로 갖는 모든 상품들이 검색됩니다.
+ * 
+ * 부분 문자열이란 문자열의 연속된 일부를 의미합니다.
+ * 예를들어 abcde의 부분 문자열로 abc나 bcde등이 있고, ac나 ea는 부분 문자열이 아닙니다.
+ * 
+ * 특정 단어로 검색해서 검색된 상품의 개수가 하나일때, 
+ * 해당 단어를 상품의 고유 검색어라고 합니다. 당신은 상품마다 고유 검색어 중 가장 짧은 고유 검색어 목록을 구하려 합니다.
+ * 
+ * 검색어 목록은 사전 순서대로 빠른 순으로 정렬되고, 중복되지 않아야 합니다.
+ * 검색어 목록은 공백 하나로 검색어들을 구분하는 형태입니다.
+ * 
+ * 만약 고유 검색어가 없다면 None을 목록에 담습니다.
+ * 
+ * 예를들어 쇼핑몰에 pencil, cilicon, contrabase, picturelist 네가지 상품이 있다면, 각 상품의 가장 짧은 고유 검색어 목록은 다음과 같습니다.
+ * 
+ * pencil : en nc pe
+ * cilicon : ico ili lic
+ * contrabase : a b
+ * picturelist : u
+ * 
+ * pencil의 고유 검색어를 예시로 들어보겠습니다.
+ * pencil의 고유검색어 중 길이가 1인 검색어는 존재하지 않습니다.
+ * - p를 검색하면 pencil과 picturelist 두가지 상품이 검색되므로 p는 pencil의 고유 검색어가 아닙니다.
+ * - en nc pe 중 하나를 검색했을때 pencil 하나만 검색됩니다. 따라서 pencil의 가장 짧은 고유 검색어는 en nc pe 3가지 입니다.
+ * - enc, nci, pencil 등도 고유 검색어지만, 더 짧은 고유 검색어가 있으므로 제외됩니다.
+ * 
+ * 쇼핑몰에 등록된 상품의 이름을 담은 문자열 배열 goods가 매개변수로 주어졌을때, 가장 짧은 고유 검색어 목록을 goods에서 주어진 상품 순서대로 문자열 배열에 담아 return 하도록 solution 함수를 완성해주세요.
+ * 
+ * 예시
+ * 입력
+ *  ["pencil", "cilicon", "contrabase", "picturelist"]
+ * 출력
+ *  ["en nc pe", "ico ili lic", "a b", "u"]
+ */
 
-  1. 그래프 만듬
-  2. 방문한 마을을 인피니트로 초기화
-  3. BFS로 탐색하면서 1부터 각 마을간의 최소 거리를 인피니트로 초기화한 배열에 넣음
-
-*/
-
-function solution(N, road, K) {
-  var answer = 0;
-  const graph = Array.from({ length: N + 1 }, () => []);
-  const path = Array.from({ length: N + 1 }, () => Infinity);
-  for (let i = 0; i < road.length; i++) {
-    graph[road[i][0]].push([road[i][1], road[i][2]]);
-    graph[road[i][1]].push([road[i][0], road[i][2]]);
-  }
-
-  const BFS = (startNode, k) => {
-    const visited = []
-    const needVisit = [startNode]
-
-    path[startNode] = 0
-
-    while (needVisit.length !== 0) {
-      const node = needVisit.shift()
-
-      for(let i of graph[node]){
-        if( path[i[0]] > path[node]+i[1]){
-          path[i[0]] = path[node]+i[1]
-          needVisit.push(i[0])
-        }
+function solution(goods) {
+  function generateSubstrings(word) {
+      let substrings = new Set();
+      for (let len = 1; len <= word.length; len++) {
+          for (let start = 0; start <= word.length - len; start++) {
+              substrings.add(word.substring(start, start + len));
+          }
       }
-    }
+      return Array.from(substrings);
   }
 
-  BFS(1,K)
+  function isUniqueSubstring(substring, word, goods) {
+      let count = 0;
+      for (let otherWord of goods) {
+          if (otherWord.includes(substring)) {
+              count++;
+              if (count > 1) return false;
+          }
+      }
+      return count === 1;
+  }
 
+  return goods.map(word => {
+      let substrings = generateSubstrings(word).sort((a, b) => a.length - b.length || a.localeCompare(b));
+      let uniqueSubstrings = [];
 
-  return path.filter( i => i <= K).length
+      for (let substring of substrings) {
+          if (isUniqueSubstring(substring, word, goods)) {
+              uniqueSubstrings.push(substring);
+          }
+      }
+
+      if (uniqueSubstrings.length === 0) {
+          return "None";
+      }
+
+      let minLength = uniqueSubstrings[0].length;
+      let result = uniqueSubstrings.filter(substring => substring.length === minLength);
+      return result.sort().join(" ");
+  });
 }
-console.log(
-  solution(
-    5, [[1, 2, 1], [2, 3, 3], [5, 2, 2], [1, 4, 2], [5, 3, 1], [5, 4, 2]], 3
-  )
-)
-console.log(
-  solution(
-    6, [[1, 2, 1], [1, 3, 2], [2, 3, 2], [3, 4, 3], [3, 5, 2], [3, 5, 3], [5, 6, 1]], 4
-  )
-)
+
+
+
+// 예시 입력
+const goods = ["pencil", "cilicon", "contrabase", "picturelist"];
+console.log(solution(goods));  // ["en nc pe", "ico ili lic", "a b", "u"]
