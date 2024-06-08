@@ -111,33 +111,35 @@
 
 */
 function solution(n, m, k, acts) {
-  let grid = Array.from({ length: n }, () => Array(m).fill(0));
-  
-  for (let act of acts) {
-      if (act[0] === 1) {  
-          let row = act[1] - 1;
-          let color = act[2];
-          for (let col = 0; col < m; col++) {
-              grid[row][col] = color;
-          }
-      } else if (act[0] === 2) {  
-          let col = act[1] - 1;
-          let color = act[2];
-          for (let row = 0; row < n; row++) {
-              grid[row][col] = color;
-          }
+  let lastRowPaint = Array(n).fill(0);
+  let lastRowColor = Array(n).fill(0);
+  let lastColPaint = Array(m).fill(0);
+  let lastColColor = Array(m).fill(0);
+
+  for (let i = 0; i < acts.length; i++) {
+      if (acts[i][0] === 1) { // 행 칠하기
+          let row = acts[i][1] - 1;
+          lastRowPaint[row] = i + 1;
+          lastRowColor[row] = acts[i][2];
+      } else if (acts[i][0] === 2) { // 열 칠하기
+          let col = acts[i][1] - 1;
+          lastColPaint[col] = i + 1;
+          lastColColor[col] = acts[i][2];
       }
   }
 
-  
   let colorCount = Array(k + 1).fill(0);
-  for (let row of grid) {
-      for (let cell of row) {
-          colorCount[cell]++;
+
+  for (let row = 0; row < n; row++) {
+      for (let col = 0; col < m; col++) {
+          if (lastRowPaint[row] > lastColPaint[col]) {
+              colorCount[lastRowColor[row]]++;
+          } else {
+              colorCount[lastColColor[col]]++;
+          }
       }
   }
 
-  
   return colorCount.slice(1);
 }
 

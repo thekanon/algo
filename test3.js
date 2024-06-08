@@ -23,25 +23,40 @@
   기댓값 〉
   [true, false, false, true]
  */
-
   function isValidString(s) {
     if (s === "a") {
         return true;
     }
-    let len = s.length;
 
-    if (s[0] === 'b' && s[len - 1] === 'b') {
-        let bCount = Math.min(s.indexOf('a'), len - 1 - s.lastIndexOf('a'));
-        if (bCount >= 1 && s.slice(0, bCount) === 'b'.repeat(bCount) && s.slice(len - bCount) === 'b'.repeat(bCount)) {
-            return isValidString(s.slice(bCount, len - bCount));
+    const len = s.length;
+
+    // 문자열 양 끝에서 'b'의 개수 세기
+    let leftBCount = 0;
+    let rightBCount = 0;
+
+    while (leftBCount < len && s[leftBCount] === 'b') {
+        leftBCount++;
+    }
+
+    while (rightBCount < len && s[len - 1 - rightBCount] === 'b') {
+        rightBCount++;
+    }
+
+    // 양쪽에 같은 수의 'b'가 있으면 내부 문자열을 재귀적으로 체크
+    if (leftBCount > 0 && leftBCount === rightBCount) {
+        const innerString = s.slice(leftBCount, len - rightBCount);
+        if (isValidString(innerString)) {
+            return true;
         }
     }
 
-    if (s[0] === 'a') {
-        return isValidString(s.slice(1));
+    // 맨 앞이나 맨 뒤에 'a'가 추가된 경우를 처리
+    if (s[0] === 'a' && isValidString(s.slice(1))) {
+        return true;
     }
-    if (s[len - 1] === 'a') {
-        return isValidString(s.slice(0, len - 1));
+
+    if (s[len - 1] === 'a' && isValidString(s.slice(0, len - 1))) {
+        return true;
     }
 
     return false;
@@ -50,6 +65,11 @@
 function solution(a) {
     return a.map(isValidString);
 }
+
+// 테스트 케이스 실행
+console.log(solution(["a", "ab", "bab", "babab", "bbababbb", "bbbabababbbaa", "bbbabababbbaab", "aaaabbbb"])); 
+// 예상 출력: [true, false, true, false, false, true, false, false]
+
 
 // // 테스트 케이스 실행
 // const input_data = ["abab", "bbaa", "bababa", "bbbabababbbaa"];
