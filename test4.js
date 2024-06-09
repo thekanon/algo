@@ -111,36 +111,30 @@
 
 */
 function solution(n, m, k, acts) {
-  let lastRowPaint = Array(n).fill(0);
-  let lastRowColor = Array(n).fill(0);
-  let lastColPaint = Array(m).fill(0);
-  let lastColColor = Array(m).fill(0);
+  let rowColored = Array(n).fill(0); // 행별 마지막으로 칠해진 색 저장
+  let colColored = Array(m).fill(0); // 열별 마지막으로 칠해진 색 저장
+  let colorCount = Array(k + 1).fill(0); // 색깔별 칸 수 저장
 
-  for (let i = 0; i < acts.length; i++) {
-      if (acts[i][0] === 1) { // 행 칠하기
-          let row = acts[i][1] - 1;
-          lastRowPaint[row] = i + 1;
-          lastRowColor[row] = acts[i][2];
-      } else if (acts[i][0] === 2) { // 열 칠하기
-          let col = acts[i][1] - 1;
-          lastColPaint[col] = i + 1;
-          lastColColor[col] = acts[i][2];
-      }
+  for (let act of acts) {
+    let type = act[0], x = act[1] - 1, color = act[2];
+
+    if (type === 1) { // 행 칠하기
+      rowColored[x] = color; 
+    } else { // 열 칠하기
+      colColored[x] = color;
+    }
   }
 
-  let colorCount = Array(k + 1).fill(0);
-
-  for (let row = 0; row < n; row++) {
-      for (let col = 0; col < m; col++) {
-          if (lastRowPaint[row] > lastColPaint[col]) {
-              colorCount[lastRowColor[row]]++;
-          } else {
-              colorCount[lastColColor[col]]++;
-          }
-      }
+  // 각 칸의 색깔을 확인하고 개수를 셈
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < m; j++) {
+      // 행 또는 열이 마지막으로 칠해진 색깔로 결정
+      let finalColor = rowColored[i] ? rowColored[i] : colColored[j]; 
+      colorCount[finalColor]++;
+    }
   }
 
-  return colorCount.slice(1);
+  return colorCount.slice(1); 
 }
 
 // 테스트 케이스 실행
