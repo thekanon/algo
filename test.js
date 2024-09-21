@@ -82,3 +82,8 @@ function solution(goods) {
 // 예시 입력
 const goods = ["pencil", "cilicon", "contrabase", "picturelist"];
 console.log(solution(goods));  // ["en nc pe", "ico ili lic", "a b", "u"]
+
+/**
+ * 돌면서 문자열 자르고 
+ */
+
